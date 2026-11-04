@@ -2,7 +2,7 @@
   "namespace": "sortIntoTabs",
   "setup": "setup.mjs",
   "name": "Sort Items Into Tabs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "hexagonaleggshell",
   "description": "Customizable bank sorting by item category with smart default groupings. Mining+Smithing, Fishing+Cooking, and more grouped together. Reset to defaults button included.",
   "license": "MIT"

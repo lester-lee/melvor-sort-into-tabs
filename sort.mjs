@@ -31,24 +31,6 @@ function collectBankItems(bank, debug) {
   return items;
 }
 
-function debugDumpBank(bank, items, debug) {
-  const methodsOf = (obj) =>
-    Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).filter(
-      (n) => typeof obj[n] === "function",
-    );
-
-  const bankMethods = methodsOf(bank);
-  debug("ALL Bank methods:", bankMethods.join(", "));
-  debug("Move-related methods:", bankMethods.filter((m) => /move|tab|item/i.test(m)).join(", "));
-
-  const sample = items[0]?.bankItem;
-  if (sample) {
-    debug("Sample bankItem structure:", Object.keys(sample));
-    if (sample.item) debug("Sample item.item structure:", Object.keys(sample.item));
-    debug("BankItem methods:", methodsOf(sample).join(", "));
-  }
-}
-
 /** Plans moves, grouped by 0-based target tab. */
 function planMoves(items, getTargetTab, maxTabs) {
   const movesByTargetTab = new Map();
@@ -237,8 +219,6 @@ export function createSorter({ getTargetTab, notify, logger }) {
         notify("No items found in bank to sort.", "info");
         return;
       }
-
-      debugDumpBank(bank, items, debug);
 
       const { movesByTargetTab, skipped: unidentified } = planMoves(items, getTargetTab, maxTabs);
 
