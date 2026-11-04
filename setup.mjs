@@ -3,10 +3,8 @@ export async function setup(ctx) {
 
   // Debug mode - set to true for verbose logging
   const DEBUG = false;
-  const log = (msg, ...args) =>
-    DEBUG && console.log(`[Sort Into Tabs] ${msg}`, ...args);
-  const logAlways = (msg, ...args) =>
-    console.log(`[Sort Into Tabs] ${msg}`, ...args);
+  const log = (msg, ...args) => DEBUG && console.log(`[Sort Into Tabs] ${msg}`, ...args);
+  const logAlways = (msg, ...args) => console.log(`[Sort Into Tabs] ${msg}`, ...args);
 
   // Helper function for user notifications - uses Toastify (game's actual notification library)
   function notify(message, type = "info") {
@@ -15,12 +13,7 @@ export async function setup(ctx) {
     // Method 1: Use Toastify (game's actual toast library)
     try {
       if (typeof Toastify === "function") {
-        const bgColor =
-          type === "error"
-            ? "#dc3545"
-            : type === "success"
-              ? "#28a745"
-              : "#17a2b8";
+        const bgColor = type === "error" ? "#dc3545" : type === "success" ? "#28a745" : "#17a2b8";
         Toastify({
           text: message,
           duration: 5000,
@@ -47,12 +40,7 @@ export async function setup(ctx) {
         Swal.fire({
           title: "Smart Tab Sort",
           text: message,
-          icon:
-            type === "error"
-              ? "error"
-              : type === "success"
-                ? "success"
-                : "info",
+          icon: type === "error" ? "error" : type === "success" ? "success" : "info",
           timer: 3000,
           timerProgressBar: true,
           toast: true,
@@ -136,13 +124,8 @@ export async function setup(ctx) {
     );
   } catch (error) {
     console.error("[Sort Into Tabs] Failed to load item data:", error);
-    console.error(
-      "[Sort Into Tabs] The mod will not function without the item database.",
-    );
-    notify(
-      "Failed to load item data. Mod will not function. Check console for details.",
-      "error",
-    );
+    console.error("[Sort Into Tabs] The mod will not function without the item database.");
+    notify("Failed to load item data. Mod will not function. Check console for details.", "error");
   }
 
   // Convert categories to sorted array for settings generation
@@ -405,15 +388,12 @@ export async function setup(ctx) {
         const sampleItem = itemsToProcess[0];
         log("Sample bankItem structure:", Object.keys(sampleItem.bankItem));
         if (sampleItem.bankItem.item) {
-          log(
-            "Sample item.item structure:",
-            Object.keys(sampleItem.bankItem.item),
-          );
+          log("Sample item.item structure:", Object.keys(sampleItem.bankItem.item));
         }
         const bankItemProto = Object.getPrototypeOf(sampleItem.bankItem);
-        const bankItemMethods = Object.getOwnPropertyNames(
-          bankItemProto,
-        ).filter((n) => typeof sampleItem.bankItem[n] === "function");
+        const bankItemMethods = Object.getOwnPropertyNames(bankItemProto).filter(
+          (n) => typeof sampleItem.bankItem[n] === "function",
+        );
         log("BankItem methods:", bankItemMethods.join(", "));
       }
 
@@ -432,11 +412,7 @@ export async function setup(ctx) {
         const targetTabIndex = targetTab - 1; // Convert 1-based to 0-based
 
         // Only move if target tab is valid and different from current
-        if (
-          targetTab > 0 &&
-          targetTab <= maxTabs &&
-          targetTabIndex !== currentTab
-        ) {
+        if (targetTab > 0 && targetTab <= maxTabs && targetTabIndex !== currentTab) {
           movesToMake.push({
             bankItem,
             item,
@@ -508,9 +484,7 @@ export async function setup(ctx) {
           if (typeof game.bank.moveSelectedItemsToTab === "function") {
             game.bank.moveSelectedItemsToTab(targetTab);
             movedCount += moves.length;
-            log(
-              `✓ Moved ${moves.length} items to tab ${targetTab + 1} via selection system`,
-            );
+            log(`✓ Moved ${moves.length} items to tab ${targetTab + 1} via selection system`);
           } else {
             log("moveSelectedItemsToTab not available, using fallback");
             // Fallback to direct manipulation
@@ -546,9 +520,7 @@ export async function setup(ctx) {
         }
       }
 
-      logAlways(
-        `Sort complete! Moved ${movedCount} items, skipped ${skippedCount}`,
-      );
+      logAlways(`Sort complete! Moved ${movedCount} items, skipped ${skippedCount}`);
 
       // AGGRESSIVE UI REFRESH
       if (movedCount > 0) {
@@ -634,8 +606,7 @@ export async function setup(ctx) {
 
       // Log detected tab count for user information
       if (typeof game !== "undefined" && game && game.bank) {
-        const tabCount =
-          game.bank.tabCount || game.bank.itemsByTab?.length || 12;
+        const tabCount = game.bank.tabCount || game.bank.itemsByTab?.length || 12;
         logAlways(
           `Detected ${tabCount} bank tabs. If you buy a new tab, please restart the game to see it in settings.`,
         );
@@ -657,9 +628,7 @@ export async function setup(ctx) {
         sortButton.style.cssText = "font-size: 14px; padding: 8px 16px;";
 
         // Try to find the bank controls area to add the button
-        const container = document.querySelector(
-          "bank-options-menu button",
-        )?.parentElement;
+        const container = document.querySelector("bank-options-menu button")?.parentElement;
         if (!container) return false;
 
         container.insertBefore(sortButton, container.firstChild);
@@ -678,9 +647,7 @@ export async function setup(ctx) {
           if (addSortButton()) {
             log("Button added successfully (delayed)");
           } else {
-            console.warn(
-              "[Sort Into Tabs] Could not find bank container after retry",
-            );
+            console.warn("[Sort Into Tabs] Could not find bank container after retry");
             console.warn(
               "[Sort Into Tabs] Button can be manually triggered via console: sortItemsIntoTabs()",
             );

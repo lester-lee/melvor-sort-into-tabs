@@ -1,6 +1,7 @@
 /**
  * Creates a lookup map directly from game data
- * @returns {{[id: string]: {[category: string]: string}}}
+ *
+ * @returns {{ [id: string]: { [category: string]: string } }}
  */
 export function getItems() {
   return Object.values(game.items).reduce((acc, items) => {
@@ -14,8 +15,8 @@ export function getItems() {
 }
 
 /**
- * @param {{[id: string]: {[category: string]: string}}} items
- * @returns {Set<string>} set of all categories found in items
+ * @param {{ [id: string]: { [category: string]: string } }} items
+ * @returns {Set<string>} Set of all categories found in items
  */
 export function getCategories(items) {
   return new Set(Object.values(items).map((item) => item.category));
