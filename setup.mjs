@@ -1,8 +1,8 @@
 export async function setup(ctx) {
-  info("Mod initializing...");
-
   const logger = await ctx.loadModule("log.mjs");
   const { debug, info, warn, error } = logger;
+  info("Mod initializing...");
+
   const { createNotify } = await ctx.loadModule("notify.mjs");
   const notify = createNotify(debug, error);
 
@@ -42,8 +42,6 @@ export async function setup(ctx) {
           if (!container) return false;
 
           container.insertBefore(sortButton, container.firstChild);
-
-          debug(`Button added to ${selector}`);
         }
 
         // Try to add button immediately
