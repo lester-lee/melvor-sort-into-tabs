@@ -10,11 +10,7 @@ export interface Logger {
   error: LogFn;
 }
 
-export const debug: LogFn = (msg, ...args) =>
-  DEBUG && console.log(`${PREFIX} ${msg}`, ...args);
-export const info: LogFn = (msg, ...args) =>
-  console.log(`${PREFIX} ${msg}`, ...args);
-export const warn: LogFn = (msg, ...args) =>
-  console.warn(`${PREFIX} ${msg}`, ...args);
-export const error: LogFn = (msg, ...args) =>
-  console.error(`${PREFIX} ${msg}`, ...args);
+export const debug: LogFn = (msg, ...args) => DEBUG && console.log(`${PREFIX} ${msg}`, ...args);
+export const info: LogFn = (msg, ...args) => console.log(`${PREFIX} ${msg}`, ...args);
+export const warn: LogFn = (msg, ...args) => console.warn(`${PREFIX} ${msg}`, ...args);
+export const error: LogFn = (msg, ...args) => console.error(`${PREFIX} ${msg}`, ...args);

@@ -1,10 +1,6 @@
 {
   "extends": "@tsconfig/bun/tsconfig.json",
-  "compilerOptions": {
-    "lib": ["DOM", "ESNext"],
-    "allowUmdGlobalAccess": true,
-    "types": ["jquery", "toastify-js"]
-  },
+  "compilerOptions": { "lib": ["DOM", "ESNext"], "allowUmdGlobalAccess": true },
   "include": [
     "src/**/*.ts",
     "node_modules/melvor-typing-project/src/libraryTypes/*",

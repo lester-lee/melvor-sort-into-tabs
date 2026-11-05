@@ -1,34 +1,24 @@
 import { getItemsAndCategories } from "./items";
 import { debug, error, info, warn } from "./log";
-import * as logger from "./log";
-import { createNotify } from "./notify";
+import notify from "./notify";
 import { registerSettings } from "./settings";
 import { createSorter, getTabCount } from "./sort";
 
 export async function setup(ctx: Modding.ModContext) {
   info("Mod initializing...");
 
-  const notify = createNotify(debug, error);
-
   try {
     const [items, categories] = getItemsAndCategories();
-    const { getTargetTab } = registerSettings({
-      ctx,
-      categories,
-      items,
-      notify,
-      logger,
-    });
-    const sortItemsIntoTabs = createSorter({ getTargetTab, notify, logger });
+    const { getTargetTab } = registerSettings({ ctx, categories, items });
+    const sortItemsIntoTabs = createSorter({ getTargetTab });
 
     // Add the "Smart Tab Sort" button to the bank interface
     ctx.onInterfaceReady(() => {
       try {
         debug("Adding UI button...");
-        info(`
-      Detected ${getTabCount()} bank tabs.
-      If you buy a new tab, please restart the game to see it in settings.
-      `);
+        info(
+          `Detected ${getTabCount()} bank tabs. If you buy a new tab, please restart the game to see it in settings.`,
+        );
 
         // Function to add button (may be called multiple times as UI loads)
         function addSortButton(): boolean {
@@ -37,9 +27,7 @@ export async function setup(ctx: Modding.ModContext) {
           }
 
           // Try to find the bank controls area to add the button
-          const container = document.querySelector(
-            "bank-options-menu button",
-          )?.parentElement;
+          const container = document.querySelector("bank-options-menu button")?.parentElement;
           if (!container) return false;
 
           const sortButton = document.createElement("button");
@@ -65,9 +53,7 @@ export async function setup(ctx: Modding.ModContext) {
               debug("Button added successfully (delayed)");
             } else {
               warn("Could not find bank container after retry");
-              warn(
-                "Button can be manually triggered via console: sortItemsIntoTabs()",
-              );
+              warn("Button can be manually triggered via console: sortItemsIntoTabs()");
             }
           }, 2000);
         }
@@ -83,6 +69,7 @@ export async function setup(ctx: Modding.ModContext) {
     info("Setup complete.");
   } catch (e) {
     error("Error.", e);
-    notify(e instanceof Error ? e.message : String(e), "error");
+    // The game UI isn't available yet during setup, so notify once it is.
+    ctx.onInterfaceReady(() => notify("error", e instanceof Error ? e.message : String(e)));
   }
 }

@@ -1,8 +1,7 @@
 /**
  * Creates a lookup map directly from game data
  *
- * @returns A map of item id to category, and the sorted list of distinct
- *   categories
+ * @returns A map of item id to category, and the sorted list of distinct categories
  * @throws {Error} If game.items is not available
  */
 export function getItemsAndCategories(): [Map<string, string>, string[]] {

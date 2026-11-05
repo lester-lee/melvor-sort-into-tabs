@@ -1,13 +1,9 @@
 import { getDefaultTab } from "./defaults";
-import type { Logger } from "./log";
-import type { Notify } from "./notify";
+import * as logger from "./log";
+import notify from "./notify";
 
-/**
- * The official typings mark every optional field as required; the game fills
- * the rest in.
- */
-const config = <T extends Modding.Settings.SettingConfig>(c: Partial<T>) =>
-  c as T;
+/** The official typings mark every optional field as required; the game fills the rest in. */
+const config = <T extends Modding.Settings.SettingConfig>(c: Partial<T>) => c as T;
 
 function getCategorySettingName(category: string): string {
   return `category-${category.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
@@ -18,27 +14,21 @@ export function registerSettings({
   ctx,
   categories,
   items,
-  notify,
-  logger,
 }: {
   ctx: Modding.ModContext;
   categories: string[];
   items: Map<string, string>;
-  notify: Notify;
-  logger: Logger;
 }) {
   const $section = ctx.settings.section("Category Settings");
 
   function resetToDefaults() {
     try {
-      categories.forEach((c) =>
-        $section.set(getCategorySettingName(c), getDefaultTab(c)),
-      );
+      categories.forEach((c) => $section.set(getCategorySettingName(c), getDefaultTab(c)));
       logger.info("All category settings reset to defaults!");
-      notify("All sorting rules reset to defaults!", "success");
+      notify("success", "All sorting rules reset to defaults!");
     } catch (err) {
       logger.error("Error resetting to defaults:", err);
-      notify("Error resetting settings. Check console for details.", "error");
+      notify("error", "Error resetting settings. Check console for details.");
     }
   }
   // Make reset function available globally for manual triggering
@@ -77,10 +67,7 @@ export function registerSettings({
     );
   }
 
-  /**
-   * Returns the 1-based target tab for an item per user settings, or 0 to leave
-   * it alone.
-   */
+  /** Returns the 1-based target tab for an item per user settings, or 0 to leave it alone. */
   function getTargetTab(itemId: string, maxTabs: number): number {
     const category = items.get(itemId);
     if (category === undefined) return 0;

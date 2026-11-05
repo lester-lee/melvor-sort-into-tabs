@@ -1,5 +1,6 @@
+import * as logger from "./log";
 import type { Logger } from "./log";
-import type { Notify } from "./notify";
+import notify from "./notify";
 
 /** `MOVE_MODE`; the game's const enum doesn't exist at runtime. */
 const MOVE_MODE = 1 as BankSelectionMode;
@@ -31,10 +32,7 @@ function planMoves(
   return { movesByTargetTab, total };
 }
 
-/**
- * Moves items using the game's own selection system, which properly updates the
- * UI.
- */
+/** Moves items using the game's own selection system, which properly updates the UI. */
 function applyMoves(
   bank: Bank,
   movesByTargetTab: Map<number, BankItem[]>,
@@ -54,9 +52,7 @@ function applyMoves(
 
       bank.moveSelectedItemsToTab(targetTab);
       moved += moves.length;
-      debug(
-        `✓ Moved ${moves.length} items to tab ${targetTab + 1} via selection system`,
-      );
+      debug(`✓ Moved ${moves.length} items to tab ${targetTab + 1} via selection system`);
 
       bank.disableItemSelectionMode();
     } catch (batchError) {
@@ -94,21 +90,14 @@ function refreshBankUI(bank: Bank, maxTabs: number, { debug, warn }: Logger) {
 
     game.render();
   } catch (renderError) {
-    warn(
-      "Render error:",
-      renderError instanceof Error ? renderError.message : renderError,
-    );
+    warn("Render error:", renderError instanceof Error ? renderError.message : renderError);
   }
 }
 
 export function createSorter({
   getTargetTab,
-  notify,
-  logger,
 }: {
   getTargetTab: (itemId: string, maxTabs: number) => number;
-  notify: Notify;
-  logger: Logger;
 }) {
   const { debug, info, error } = logger;
 
@@ -120,20 +109,16 @@ export function createSorter({
       const maxTabs = getTabCount();
       debug("Max tabs available:", maxTabs);
 
-      const { movesByTargetTab, total } = planMoves(
-        bank,
-        getTargetTab,
-        maxTabs,
-      );
+      const { movesByTargetTab, total } = planMoves(bank, getTargetTab, maxTabs);
       debug(`Total items to process: ${total}`);
 
       if (total === 0) {
-        notify("No items found in bank to sort.", "info");
+        notify("info", "No items found in bank to sort.");
         return;
       }
 
       if (movesByTargetTab.size === 0) {
-        notify("All items already in correct tabs!", "info");
+        notify("info", "All items already in correct tabs!");
         return;
       }
 
@@ -147,16 +132,16 @@ export function createSorter({
 
       if (moved > 0) {
         refreshBankUI(bank, maxTabs, logger);
-        notify(`✓ Sorted ${moved} items!`, "success");
+        notify("success", `✓ Sorted ${moved} items!`);
       } else {
-        notify("No items needed moving.", "info");
+        notify("info", "No items needed moving.");
       }
 
       debug("========== SORT COMPLETE ==========");
     } catch (err) {
       error("Fatal error:", err);
       if (err instanceof Error) error("Stack:", err.stack);
-      notify("Error sorting bank. Check console (F12) for details.", "error");
+      notify("error", "Error sorting bank. Check console (F12) for details.");
     }
   };
 }
