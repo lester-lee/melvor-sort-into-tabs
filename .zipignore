@@ -1,0 +1,6 @@
+build
+.git/*
+.gitignore
+.zipignore
+README.md
+bunfig.toml

@@ -1,0 +1,2 @@
+#! /usr/bin/fish 
+zip -r sort-items-into-tabs.zip . -x@.zipignore
