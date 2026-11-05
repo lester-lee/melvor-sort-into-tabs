@@ -1,5 +1,5 @@
 // Default tab assignments - grouped thematically by related skills
-const DEFAULT_TAB_ASSIGNMENTS = {
+const DEFAULT_TAB_ASSIGNMENTS: Record<string, number> = {
   // Tab 1: Miscellaneous (default tab where new items go)
   Misc: 1,
   Miscellaneous: 1,
@@ -67,7 +67,6 @@ const DEFAULT_TAB_ASSIGNMENTS = {
   Patreon: 12,
 };
 
-/** @param {string} category */
-export function getDefaultTab(category) {
+export function getDefaultTab(category: string): number {
   return DEFAULT_TAB_ASSIGNMENTS[category] ?? 0;
 }

@@ -1,6 +1,6 @@
 # https://bun.com/docs/format#options
 [fmt]
-printWidth = 100
+printWidth = 80
 tabWidth = 2
 useTabs = false
 semi = true

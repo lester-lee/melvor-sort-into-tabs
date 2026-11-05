@@ -1,0 +1,32 @@
+{
+  "lockfileVersion": 2,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "sort-items-into-tabs",
+      "devDependencies": {
+        "@tsconfig/bun": "^1.0.11",
+        "@types/jquery": "^3.5.6",
+        "@types/toastify-js": "^1.12.4",
+        "melvor-typing-project": "github:GamesByMalcsPtyLtd/Melvor-Typing-Project#aa84a4253d998ab03f396aee9e1c0b3a9df0582c",
+        "sweetalert2": "^11.26.25",
+        "typescript": "^6",
+      },
+    },
+  },
+  "packages": {
+    "@tsconfig/bun": ["@tsconfig/bun@1.0.11", "", {}, "sha512-DQA3HOKFQ+/yPTUa73k5QGcuEM1ExtL6uWQMR0QrfOTitm0oLHqHd1tI74WtEtMqlIu+tvSMELJ6p5uNxVE7lw=="],
+
+    "@types/jquery": ["@types/jquery@3.5.34", "", { "dependencies": { "@types/sizzle": "*" } }, "sha512-3m3939S3erqmTLJANS/uy0B6V7BorKx7RorcGZVjZ62dF5PAGbKEDZK1CuLtKombJkFA2T1jl8LAIIs7IV6gBQ=="],
+
+    "@types/sizzle": ["@types/sizzle@2.3.10", "", {}, "sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww=="],
+
+    "@types/toastify-js": ["@types/toastify-js@1.12.4", "", {}, "sha512-zfZHU4tKffPCnZRe7pjv/eFKzTVHozKewFCKaCjZ4gFinKgJRz/t0bkZiMCXJxPhv/ZoeDGNOeRD09R0kQZ/nw=="],
+
+    "melvor-typing-project": ["melvor-typing-project@github:GamesByMalcsPtyLtd/Melvor-Typing-Project#aa84a42", {}, "GamesByMalcsPtyLtd-Melvor-Typing-Project-aa84a42", "sha512-4LsMGCMbul2eoaOZytjxYdCSq1g4m2kpr6zD6fwmqPfp/hnaVQxUirS2190fikSPNS7Y8gOr1Ko2PtqwADttSA=="],
+
+    "sweetalert2": ["sweetalert2@11.26.25", "", {}, "sha512-+hunCOJdJ6FLj04T9YSLvvZXRjsvIkTeTKP2e4VF8CaBias961BTnWiSFAy7F/CM5eq3QK2Rraoc5Gzftslvkg=="],
+
+    "typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw=="],
+  }
+}

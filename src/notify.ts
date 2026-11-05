@@ -1,12 +1,19 @@
-const COLORS = { error: "#dc3545", success: "#28a745", info: "#17a2b8" };
+import type { LogFn } from "./log";
+
+export type NotifyType = "error" | "success" | "info";
+export type Notify = (message: string, type?: NotifyType) => void;
+
+const COLORS: Record<NotifyType, string> = {
+  error: "#dc3545",
+  success: "#28a745",
+  info: "#17a2b8",
+};
 
 /**
- * Creates a user notification function, trying the game's notification libraries first.
- *
- * @param {(msg: string, ...args: unknown[]) => void} debug
- * @param {(msg: string, ...args: unknown[]) => void} error
+ * Creates a user notification function, trying the game's notification
+ * libraries first.
  */
-export function createNotify(debug, error) {
+export function createNotify(debug: LogFn, error: LogFn): Notify {
   return function notify(message, type = "info") {
     debug(`${type.toUpperCase()}: ${message}`);
     const bgColor = COLORS[type] ?? COLORS.info;
@@ -31,7 +38,7 @@ export function createNotify(debug, error) {
         return;
       }
     } catch (e) {
-      debug("Toastify failed:", e.message);
+      debug("Toastify failed:", e instanceof Error ? e.message : e);
     }
 
     // Method 2: Use SweetAlert2 (Swal) - game uses this for dialogs
@@ -40,7 +47,12 @@ export function createNotify(debug, error) {
         Swal.fire({
           title: "Smart Tab Sort",
           text: message,
-          icon: type === "error" ? "error" : type === "success" ? "success" : "info",
+          icon:
+            type === "error"
+              ? "error"
+              : type === "success"
+                ? "success"
+                : "info",
           timer: 3000,
           timerProgressBar: true,
           toast: true,
@@ -51,7 +63,7 @@ export function createNotify(debug, error) {
         return;
       }
     } catch (e) {
-      debug("Swal failed:", e.message);
+      debug("Swal failed:", e instanceof Error ? e.message : e);
     }
 
     // Method 3: Use game's native fireTopNotification if available

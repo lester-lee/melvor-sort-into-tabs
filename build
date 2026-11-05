@@ -1,2 +1,5 @@
-#! /usr/bin/fish 
-zip -r sort-items-into-tabs.zip . -x@.zipignore
+#! /usr/bin/fish
+bunx tsc --noEmit; or exit 1
+rm -rf dist sort-items-into-tabs.zip
+bun build src/setup.ts --format=esm --outfile=dist/setup.mjs; or exit 1
+zip -r sort-items-into-tabs.zip manifest.json dist

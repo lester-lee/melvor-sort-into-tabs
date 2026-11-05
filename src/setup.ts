@@ -1,34 +1,46 @@
-export async function setup(ctx) {
-  const logger = await ctx.loadModule("log.mjs");
-  const { debug, info, warn, error } = logger;
+import { getItemsAndCategories } from "./items";
+import { debug, error, info, warn } from "./log";
+import * as logger from "./log";
+import { createNotify } from "./notify";
+import { registerSettings } from "./settings";
+import { createSorter, getTabCount } from "./sort";
+
+export async function setup(ctx: Modding.ModContext) {
   info("Mod initializing...");
 
-  const { createNotify } = await ctx.loadModule("notify.mjs");
   const notify = createNotify(debug, error);
-
-  const { registerSettings } = await ctx.loadModule("settings.mjs");
-  const sort = await ctx.loadModule("sort.mjs");
-  const { getItemsAndCategories } = await ctx.loadModule("items.mjs");
 
   try {
     const [items, categories] = getItemsAndCategories();
-    const { getTargetTab } = await registerSettings({ ctx, categories, items, notify, logger });
-    const sortItemsIntoTabs = sort.createSorter({ getTargetTab, notify, logger });
+    const { getTargetTab } = registerSettings({
+      ctx,
+      categories,
+      items,
+      notify,
+      logger,
+    });
+    const sortItemsIntoTabs = createSorter({ getTargetTab, notify, logger });
 
     // Add the "Smart Tab Sort" button to the bank interface
     ctx.onInterfaceReady(() => {
       try {
         debug("Adding UI button...");
         info(`
-      Detected ${sort.getTabCount()} bank tabs.
+      Detected ${getTabCount()} bank tabs.
       If you buy a new tab, please restart the game to see it in settings.
       `);
 
         // Function to add button (may be called multiple times as UI loads)
-        function addSortButton() {
+        function addSortButton(): boolean {
           if (document.getElementById("sort-into-tabs-button")) {
             return true;
           }
+
+          // Try to find the bank controls area to add the button
+          const container = document.querySelector(
+            "bank-options-menu button",
+          )?.parentElement;
+          if (!container) return false;
 
           const sortButton = document.createElement("button");
           sortButton.id = "sort-into-tabs-button";
@@ -37,11 +49,8 @@ export async function setup(ctx) {
           sortButton.onclick = sortItemsIntoTabs;
           sortButton.style.cssText = "font-size: 14px; padding: 8px 16px;";
 
-          // Try to find the bank controls area to add the button
-          const container = document.querySelector("bank-options-menu button")?.parentElement;
-          if (!container) return false;
-
           container.insertBefore(sortButton, container.firstChild);
+          return true;
         }
 
         // Try to add button immediately
@@ -56,7 +65,9 @@ export async function setup(ctx) {
               debug("Button added successfully (delayed)");
             } else {
               warn("Could not find bank container after retry");
-              warn("Button can be manually triggered via console: sortItemsIntoTabs()");
+              warn(
+                "Button can be manually triggered via console: sortItemsIntoTabs()",
+              );
             }
           }, 2000);
         }
@@ -72,6 +83,6 @@ export async function setup(ctx) {
     info("Setup complete.");
   } catch (e) {
     error("Error.", e);
-    notify(e.message, "error");
+    notify(e instanceof Error ? e.message : String(e), "error");
   }
 }
