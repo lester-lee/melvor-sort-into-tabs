@@ -1,4 +1,5 @@
 import { getDefaultTab } from "./defaults";
+import type { CategoryIconMap, ItemCategoryMap } from "./items";
 import * as logger from "./log";
 import notify from "./notify";
 
@@ -9,6 +10,8 @@ function getCategorySettingName(category: string): string {
   return `category-${category.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
 }
 
+const CELL_CLASS = "sortIntoTab-category";
+
 /** Registers the category-to-tab settings UI. */
 export function registerSettings({
   ctx,
@@ -16,14 +19,15 @@ export function registerSettings({
   items,
 }: {
   ctx: Modding.ModContext;
-  categories: string[];
-  items: Map<string, string>;
+  categories: CategoryIconMap;
+  items: ItemCategoryMap;
 }) {
   const $section = ctx.settings.section("Category Settings");
 
   function resetToDefaults() {
     try {
-      categories.forEach((c) => $section.set(getCategorySettingName(c), getDefaultTab(c)));
+      for (const c of categories.keys())
+        $categories.set(getCategorySettingName(c), getDefaultTab(c));
       logger.info("All category settings reset to defaults!");
       notify("success", "All sorting rules reset to defaults!");
     } catch (err) {
@@ -54,15 +58,32 @@ export function registerSettings({
     }),
   );
 
-  for (const category of categories) {
-    $section.add(
-      config<Modding.Settings.NumberConfig>({
-        type: "number",
+  const $categories = ctx.settings.section("Category Tabs");
+  ctx.loadStylesheet("styles.css");
+
+  for (const [category, icon] of categories) {
+    $categories.add(
+      config<Modding.Settings.SettingConfig>({
+        type: "custom",
         name: getCategorySettingName(category),
-        label: category,
         default: getDefaultTab(category),
-        min: 0,
-        max: 100,
+        render: (name, onChange) => {
+          const cell = document.createElement("div");
+          cell.className = `${CELL_CLASS} d-flex flex-column align-items-center`;
+          cell.innerHTML = `
+            <img src="${icon}" alt="${category}" title="${category}"/>
+            <input
+              type="text"
+              id="${name}"
+              class="form-control form-control-sm text-center"
+              value="${getDefaultTab(category)}"
+            />
+          `;
+          cell.querySelector("input")!.addEventListener("change", onChange);
+          return cell;
+        },
+        get: (root) => Number(root.querySelector("input")?.value) || 0,
+        set: (root, value) => (root.querySelector("input")!.value = String(value)),
       }),
     );
   }
@@ -72,7 +93,7 @@ export function registerSettings({
     const category = items.get(itemId);
     if (category === undefined) return 0;
 
-    const targetTab = $section.get(getCategorySettingName(category)) as number;
+    const targetTab = $categories.get(getCategorySettingName(category)) as number;
     return targetTab > 0 && targetTab <= maxTabs ? targetTab : 0;
   }
 

@@ -1,8 +1,8 @@
 {
   "namespace": "sortIntoTabs",
-  "setup": "dist/setup.mjs",
+  "setup": "setup.mjs",
   "name": "Sort Items Into Tabs",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "hexagonaleggshell",
   "description": "Sort items into tabs based on their type.",
   "license": "MIT"

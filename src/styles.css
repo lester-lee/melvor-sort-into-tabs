@@ -1,0 +1,24 @@
+.mb-4:has(> .sortIntoTab-category) {
+  display: contents;
+}
+
+.col:has(> .mb-4 > .sortIntoTab-category) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5ch, 1fr));
+  gap: 0.25rem;
+}
+
+/* Anything else in the column (e.g. a heading) spans the full row */
+.col:has(> .mb-4 > .sortIntoTab-category) > :not(:has(> .sortIntoTab-category)) {
+  grid-column: 1 / -1;
+}
+
+.sortIntoTab-category img {
+  width: 32px;
+  height: 32px;
+}
+
+.sortIntoTab-category input {
+  width: 100%;
+  min-width: 5ch;
+}

@@ -33,7 +33,7 @@ export async function setup(ctx: Modding.ModContext) {
           const sortButton = document.createElement("button");
           sortButton.id = "sort-into-tabs-button";
           sortButton.className = "btn btn-primary m-2";
-          sortButton.textContent = "Smart Tab Sort";
+          sortButton.textContent = "Sort into Tabs";
           sortButton.onclick = sortItemsIntoTabs;
           sortButton.style.cssText = "font-size: 14px; padding: 8px 16px;";
 
@@ -58,9 +58,10 @@ export async function setup(ctx: Modding.ModContext) {
           }, 2000);
         }
 
-        // Make function available globally for manual triggering
+        // Make functions globally available
+        window.getItemsAndCategories = getItemsAndCategories;
         window.sortItemsIntoTabs = sortItemsIntoTabs;
-        debug("Function available globally: window.sortItemsIntoTabs()");
+        debug("Global functions registered: getItemsAndCategories, sortItemsIntoTabs");
       } catch (err) {
         error("Error adding button:", err);
       }

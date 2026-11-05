@@ -1,5 +1,5 @@
 // Debug mode - set to true for verbose logging
-const DEBUG = true;
+const DEBUG = false;
 const PREFIX = "[Sort Into Tabs]";
 
 export type LogFn = (msg: string, ...args: unknown[]) => void;

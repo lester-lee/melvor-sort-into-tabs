@@ -2,4 +2,4 @@
 bunx tsc --noEmit; or exit 1
 rm -rf dist sort-items-into-tabs.zip
 bun build src/setup.ts --format=esm --outfile=dist/setup.mjs; or exit 1
-zip -r sort-items-into-tabs.zip manifest.json dist
+zip -j sort-items-into-tabs.zip manifest.json src/styles.css dist/setup.mjs

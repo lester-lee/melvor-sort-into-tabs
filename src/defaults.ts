@@ -36,6 +36,7 @@ const DEFAULT_TAB_ASSIGNMENTS: Record<string, number> = {
   Harvesting: 6,
 
   // Tab 7: Magic (Runecrafting, Astrology, Summoning, Prayer)
+  Magic: 7,
   Runecrafting: 7,
   Astrology: 7,
   Summoning: 7,
