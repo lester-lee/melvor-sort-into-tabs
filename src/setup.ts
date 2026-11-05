@@ -2,7 +2,7 @@ import { getItemsAndCategories } from "./items";
 import { debug, error, info, warn } from "./log";
 import notify from "./notify";
 import { registerSettings } from "./settings";
-import { createSorter, getTabCount } from "./sort";
+import { createSorter } from "./sort";
 
 export async function setup(ctx: Modding.ModContext) {
   info("Mod initializing...");
@@ -17,7 +17,7 @@ export async function setup(ctx: Modding.ModContext) {
       try {
         debug("Adding UI button...");
         info(
-          `Detected ${getTabCount()} bank tabs. If you buy a new tab, please restart the game to see it in settings.`,
+          `Detected ${game.bank.tabCount} bank tabs. If you buy a new tab, please restart the game to see it in settings.`,
         );
 
         // Function to add button (may be called multiple times as UI loads)

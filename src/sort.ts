@@ -5,11 +5,6 @@ import notify from "./notify";
 /** `MOVE_MODE`; the game's const enum doesn't exist at runtime. */
 const MOVE_MODE = 1 as BankSelectionMode;
 
-/** Number of bank tabs available. */
-export function getTabCount(): number {
-  return game.bank.tabCount;
-}
-
 /** Plans moves, grouped by 0-based target tab. */
 function planMoves(
   bank: Bank,
@@ -106,7 +101,7 @@ export function createSorter({
       debug("========== STARTING SORT ==========");
 
       const bank = game.bank;
-      const maxTabs = getTabCount();
+      const maxTabs = game.bank.tabCount;
       debug("Max tabs available:", maxTabs);
 
       const { movesByTargetTab, total } = planMoves(bank, getTargetTab, maxTabs);
